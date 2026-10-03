@@ -47,3 +47,36 @@ def test_mark_urgent():
     
     system.mark_urgent("REQ001")
     assert system.requests["REQ001"].priority == "high"
+
+
+def test_undo_mark_urgent():
+    system = SupportSystem()
+    r1 = Request("REQ001", "Ada Obi", "ada@example.com", "Can't log in", date.today())
+    system.add_request(r1)
+    
+    system.mark_urgent("REQ001")
+    assert system.requests["REQ001"].priority == "high"
+    
+    # Undo should restore to "normal"
+    undone = system.undo()
+    assert undone == ("priority", "REQ001", "normal")
+    assert system.requests["REQ001"].priority == "normal"
+
+
+def test_undo_process_next():
+    system = SupportSystem()
+    r1 = Request("REQ001", "Ada Obi", "ada@example.com", "Can't log in", date.today())
+    system.add_request(r1)
+    
+    system.process_next()
+    assert system.requests["REQ001"].status == "processing"
+    
+    # Undo should restore to "open"
+    undone = system.undo()
+    assert undone == ("status", "REQ001", "open")
+    assert system.requests["REQ001"].status == "open"
+
+
+def test_undo_empty_history():
+    system = SupportSystem()
+    assert system.undo() is None

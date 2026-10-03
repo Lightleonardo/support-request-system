@@ -41,6 +41,16 @@ class SupportSystem:
             self.history.append(("priority", request_id, old_priority))
         return request
 
+    def undo(self):
+        """Undo the most recent change to a request."""
+        if not self.history:
+            return None
+        field, request_id, old_value = self.history.pop()
+        request = self.requests.get(request_id)
+        if request:
+            setattr(request, field, old_value)
+        return (field, request_id, old_value)
+
 
 
         
