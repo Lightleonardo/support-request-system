@@ -10,14 +10,14 @@ def test_sort_by_date():
     today = date.today()
     yesterday = today - timedelta(days=1)
     tomorrow = today + timedelta(days=1)
-    
+
     r1 = Request("REQ003", "User C", "c@example.com", "Third", tomorrow)
     r2 = Request("REQ001", "User A", "a@example.com", "First", yesterday)
     r3 = Request("REQ002", "User B", "b@example.com", "Second", today)
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     sorted_requests = sort_requests(system, by="date")
     assert sorted_requests[0].request_id == "REQ001"  # yesterday
     assert sorted_requests[1].request_id == "REQ002"  # today
@@ -27,7 +27,7 @@ def test_sort_by_date():
 def test_sort_by_priority():
     system = SupportSystem()
     today = date.today()
-    
+
     r1 = Request("REQ001", "User A", "a@example.com", "Normal priority", today)
     r2 = Request("REQ002", "User B", "b@example.com", "High priority", today)
     r3 = Request("REQ003", "User C", "c@example.com", "Low priority", today)
@@ -37,7 +37,7 @@ def test_sort_by_priority():
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     sorted_requests = sort_requests(system, by="priority")
     assert sorted_requests[0].priority == "high"
     assert sorted_requests[1].priority == "normal"
@@ -47,7 +47,7 @@ def test_sort_by_priority():
 def test_sort_by_status():
     system = SupportSystem()
     today = date.today()
-    
+
     r1 = Request("REQ001", "User A", "a@example.com", "Processing", today)
     r2 = Request("REQ002", "User B", "b@example.com", "Closed", today)
     r3 = Request("REQ003", "User C", "c@example.com", "Open", today)
@@ -57,7 +57,7 @@ def test_sort_by_status():
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     sorted_requests = sort_requests(system, by="status")
     assert sorted_requests[0].status == "open"
     assert sorted_requests[1].status == "processing"
@@ -68,7 +68,7 @@ def test_sort_invalid_key():
     system = SupportSystem()
     r1 = Request("REQ001", "User A", "a@example.com", "Test", date.today())
     system.add_request(r1)
-    
+
     with pytest.raises(ValueError):
         sort_requests(system, by="invalid")
 
@@ -79,17 +79,17 @@ def test_both_sorts_agree():
     today = date.today()
     yesterday = today - timedelta(days=1)
     tomorrow = today + timedelta(days=1)
-    
+
     r1 = Request("REQ003", "User C", "c@example.com", "Third", tomorrow)
     r2 = Request("REQ001", "User A", "a@example.com", "First", yesterday)
     r3 = Request("REQ002", "User B", "b@example.com", "Second", today)
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     builtin_result = sort_requests(system, by="date")
     manual_result = insertion_sort_requests(system, by="date")
-    
+
     assert len(builtin_result) == len(manual_result)
     for b, m in zip(builtin_result, manual_result):
         assert b.request_id == m.request_id
@@ -99,7 +99,7 @@ def test_both_sorts_agree_priority():
     """Test that both sorting approaches agree on priority sort."""
     system = SupportSystem()
     today = date.today()
-    
+
     r1 = Request("REQ001", "User A", "a@example.com", "Normal", today)
     r2 = Request("REQ002", "User B", "b@example.com", "High", today)
     r3 = Request("REQ003", "User C", "c@example.com", "Low", today)
@@ -109,10 +109,10 @@ def test_both_sorts_agree_priority():
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     builtin_result = sort_requests(system, by="priority")
     manual_result = insertion_sort_requests(system, by="priority")
-    
+
     assert len(builtin_result) == len(manual_result)
     for b, m in zip(builtin_result, manual_result):
         assert b.request_id == m.request_id
@@ -122,7 +122,7 @@ def test_both_sorts_agree_status():
     """Test that both sorting approaches agree on status sort."""
     system = SupportSystem()
     today = date.today()
-    
+
     r1 = Request("REQ001", "User A", "a@example.com", "Processing", today)
     r2 = Request("REQ002", "User B", "b@example.com", "Closed", today)
     r3 = Request("REQ003", "User C", "c@example.com", "Open", today)
@@ -132,10 +132,10 @@ def test_both_sorts_agree_status():
     system.add_request(r1)
     system.add_request(r2)
     system.add_request(r3)
-    
+
     builtin_result = sort_requests(system, by="status")
     manual_result = insertion_sort_requests(system, by="status")
-    
+
     assert len(builtin_result) == len(manual_result)
     for b, m in zip(builtin_result, manual_result):
         assert b.request_id == m.request_id

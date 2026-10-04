@@ -50,7 +50,3 @@ class SupportSystem:
         if request:
             setattr(request, field, old_value)
         return (field, request_id, old_value)
-
-
-
-        

@@ -10,7 +10,7 @@ def sort_requests(system, by="date"):
     Space complexity: O(n)
     """
     requests = list(system.requests.values())
-    
+
     if by == "date":
         return sorted(requests, key=lambda r: r.date_received)
     elif by == "priority":
@@ -32,7 +32,7 @@ def insertion_sort_requests(system, by="date"):
     Space complexity: O(1) in-place, O(n) for the list copy
     """
     requests = list(system.requests.values())
-    
+
     if by == "date":
         key_func = lambda r: r.date_received
     elif by == "priority":
@@ -43,7 +43,7 @@ def insertion_sort_requests(system, by="date"):
         key_func = lambda r: status_order.get(r.status, 0)
     else:
         raise ValueError(f"Unknown sort key: {by}")
-    
+
     # Insertion sort
     for i in range(1, len(requests)):
         current = requests[i]
@@ -53,5 +53,5 @@ def insertion_sort_requests(system, by="date"):
             requests[j + 1] = requests[j]
             j -= 1
         requests[j + 1] = current
-    
+
     return requests

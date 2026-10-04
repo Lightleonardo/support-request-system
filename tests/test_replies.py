@@ -31,7 +31,7 @@ def test_display_replies_with_request():
     r1 = Request("REQ001", "Ada Obi", "ada@example.com", "Can't log in", date.today())
     r1.replies = ["Thanks for reporting", "We're looking into it", "Fixed in v2.1"]
     system.add_request(r1)
-    
+
     result = display_replies(r1.replies)
     assert len(result) == 3
     assert result[0] == "Reply 1: Thanks for reporting"
